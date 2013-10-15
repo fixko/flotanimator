@@ -1,4 +1,4 @@
-flotanimator
+jQuery Flot Animator
 ============
 
 jQuery Flot Animator v1.0
