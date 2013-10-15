@@ -1,7 +1,7 @@
 flotanimator
 ============
 
-jQuery Flot Animator
+jQuery Flot Animator v1.0
 
 Flot Animator is a free jQuery Plugin that will add fluid animations to any Flot chart.
 
