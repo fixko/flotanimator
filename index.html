@@ -20,14 +20,14 @@ more info, usage and download here => <a href="http://www.codicode.com/art/jquer
 	Start delay: <input id="start" style="width:35px" value="0" />
 	Steps: <input id="steps" style="width:25px" value="135" />
 	Duration: <input id="duration" style="width:35px" value="3000" /> <i>ms</i>
-	Direction: <select id="dir"><option value="right">Right</option><option value="left" selected>Left</option></select>
+	Direction: <select id="dir"><option value="right">Right</option><option value="left" selected>Left</option><option value="center">Center</option></select>
 	<button id="bnt1" type="button">Animate</button>
 </div>
 </td>
 <td style="text-align:center;">
 	<h3 style="margin-bottom:0px;">Example 2</h3>
 	<div id="chart2" style="width:540px;height:250px;padding:5px;"></div>
-	<button id="bnt2" type="button">Animate</button>
+	<button id="bnt2" type="button">Draw Evolution Line</button>
 </td>
 </tr>
 <tr>
@@ -65,7 +65,8 @@ more info, usage and download here => <a href="http://www.codicode.com/art/jquer
 
 
 	var d0 = [[2, 5], [4, 8], [6, 2], [7, 3], [10, 4], [12, 5], [13, 6], [14, 4]];
-    	var plot2 = $.plotAnimator($("#chart2"), [{ data: d0, animator: {steps: 136, duration: 2500, start:0}, lines: { show: true, fill: false },label: "Let's Go" }],{grid: { backgroundColor: { colors: [ "#fff", "#eee" ] }}});
+	var d1 = [[2, 5], [4, 8], [6, 2], [7, 3], [10, 4], [12, 5], [13, 6], [14, 4]];
+    	var plot2 = $.plotAnimator($("#chart2"), [{ data: d1, animator: {steps: 136, duration: 2500, start:0}, points: { show: true, fill: true, radius:10,fillColor:"#aa00aa" },label: "Bars" }],{grid: { backgroundColor: { colors: [ "#fff", "#eee" ] }}});
 
 	$("#bnt2").attr("disabled", "disabled");
 	$("#chart2").on("animatorComplete", function() {
@@ -73,7 +74,7 @@ more info, usage and download here => <a href="http://www.codicode.com/art/jquer
 	});
 	$("#bnt2").on("click",function() {
 		$("#bnt2").attr("disabled", "disabled");
-    		plot2 = $.plotAnimator($("#chart2"), [{ data: d0, animator: {steps: 136, duration: 2500, start:0}, lines: { show: true, fill: false },label: "Let's Go" }],{grid: { backgroundColor: { colors: [ "#fff", "#eee" ] }}});
+	    	plot2 = $.plotAnimator($("#chart2"), [{ data: d1, points: { show: true, fill: true , radius:10,fillColor:"#aa00aa"},label: "Bars" }, { data: d0, animator: {steps: 136, duration: 2500, start:0}, lines: { show: true, fill: false },label: "Evolution" }],{grid: { backgroundColor: { colors: [ "#fff", "#eee" ] }}});
 	});
 
 
