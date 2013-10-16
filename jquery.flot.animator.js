@@ -11,31 +11,33 @@ Licensed under Creative Commons Attribution 3.0 Unported License.
 $.extend({
   plotAnimator: function (chart, data,g){
     
-    function fData(arr){
-      var x = [];
+    var serie = 0;
+    for (var i = 0; i < data.length; i++)
+    {
+      if (data[i].animator)
+      {
+        serie = i;
+      }
+    }
+    
+    function pInit(arr){
+	  var x = [];
       x.push([arr[0][0], Math.max.apply(Math, arr.map(function(i) { return i[1];}))]);
       x.push([arr[0][0], null]);
       x.push([arr[0][0], Math.min.apply(Math, arr.map(function(i) { return i[1];}))]);
       for(var i = 0; i < arr.length; i++) {
           x.push([arr[i][0], null]);
       }
-      return x;
+      data[serie].data = x;
+      return $.plot(chart, data, g);
     }
     
-    var serie = 0;
-    for (var i = 0; i < data.length; i++)
-    {
-      if (data[i].animator)
-      {
-        serie=i;
-      }
-    }
     var d0 = data[serie];
-    
     var oData = d0.data;
-    data[serie].data = fData(oData);
-    var plot = $.plot(chart, data,g);
     
+    var plot = pInit(oData);
+    
+    var isLines = (data[serie].lines)?true:false;
     var steps = (data[serie].animator && data[serie].animator.steps) || 135;
     var duration = (data[serie].animator && data[serie].animator.duration) || 1000;
     var start = (data[serie].animator && data[serie].animator.start) || 0;
@@ -80,14 +82,37 @@ $.extend({
     var sData = stepData();
     function plotData()
     {
-      var d3 = [];
-      for (var i = 0; i < sData.length; i++)
-      {
-        var ni = (dir=="right")?i:sData.length-i;
-        d3.push((i<=step+1)?sData[ni]:[sData[ni][0], null]);
-      }
+      var d3=[];
       step++;
-      data[serie].data = (step<steps) ?d3:oData;
+      
+      switch(dir)
+      {
+        case 'right':
+          d3 = sData.slice(0, step);
+          break;
+        case 'left':
+          d3 = sData.slice(-1*step);
+          break
+          case 'center':
+          d3 = sData.slice((sData.length/2)-(step/2),(sData.length/2)+(step/2));
+          break;
+      }
+      
+      if (!isLines)
+      {
+        inV = d3[0][0];
+      	laV = d3[d3.length-1][0];
+        d3=[];
+        for (var i = 0; i < oData.length; i++)
+      	{
+          if (oData[i][0]>=inV && oData[i][0]<=laV)
+          {
+            d3.push(oData[i]);
+          }
+      	}
+      }
+      
+      data[serie].data = (step<steps)?d3:oData;
       plot.setData(data);
       plot.draw();
       if (step<steps)
@@ -99,6 +124,7 @@ $.extend({
         chart.trigger( "animatorComplete" );
       }
     }
+    
     setTimeout(plotData,start);
     return plot;
   }
