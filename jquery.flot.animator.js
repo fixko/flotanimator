@@ -10,7 +10,7 @@ Licensed under Creative Commons Attribution 3.0 Unported License.
 
 $.extend({
   plotAnimator: function (chart, data,g){
-    
+
     var serie = 0;
     for (var i = 0; i < data.length; i++)
     {
@@ -19,7 +19,7 @@ $.extend({
         serie = i;
       }
     }
-    
+
     function pInit(arr){
 	  var x = [];
       x.push([arr[0][0], Math.max.apply(Math, arr.map(function(i) { return i[1];}))]);
@@ -31,12 +31,12 @@ $.extend({
       data[serie].data = x;
       return $.plot(chart, data, g);
     }
-    
+
     var d0 = data[serie];
     var oData = d0.data;
-    
+
     var plot = pInit(oData);
-    
+
     var isLines = (data[serie].lines)?true:false;
     var steps = (data[serie].animator && data[serie].animator.steps) || 135;
     var duration = (data[serie].animator && data[serie].animator.duration) || 1000;
@@ -44,11 +44,11 @@ $.extend({
     var dir = (data[serie].animator && data[serie].animator.direction) || "right";
     function stepData()
     {
-      var Si = oData[0][0];
-      var Fi = oData[oData.length-1][0];
-      var Pas = (Fi-Si)/steps;
-      
-      var d2 = [];      
+      var Si = parseInt(oData[0][0]);
+      var Fi = parseInt(oData[oData.length-1][0]);
+      var Pas = parseInt((Fi-Si)/steps);
+
+      var d2 = [];
       d2.push(oData[0]);
       var nPointPos = 1;
       lPoint = oData[0];
@@ -77,14 +77,14 @@ $.extend({
       }
       return d2;
     }
-    
+
     var step=0;
     var sData = stepData();
     function plotData()
     {
       var d3=[];
       step++;
-      
+
       switch(dir)
       {
         case 'right':
@@ -97,7 +97,7 @@ $.extend({
           d3 = sData.slice((sData.length/2)-(step/2),(sData.length/2)+(step/2));
           break;
       }
-      
+
       if (!isLines)
       {
         inV = d3[0][0];
@@ -111,7 +111,7 @@ $.extend({
           }
       	}
       }
-      
+
       data[serie].data = (step<steps)?d3:oData;
       plot.setData(data);
       plot.draw();
@@ -124,7 +124,7 @@ $.extend({
         chart.trigger( "animatorComplete" );
       }
     }
-    
+
     setTimeout(plotData,start);
     return plot;
   }
